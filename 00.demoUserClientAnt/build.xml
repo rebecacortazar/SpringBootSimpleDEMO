@@ -1,0 +1,45 @@
+<project name="00.demoUserClientAnt" default="run" basedir=".">
+    <!-- Define properties -->
+	<property name="src.dir" location="src"/>
+   	<property name="build.dir" location="bin"/>
+	<property name="lib.dir" location="lib"/>
+	<property name="resources.dir" location="resources"/>
+	
+    
+    <property name="main.class" value="es.demo.UserClientApplication"/> 
+
+    <!-- Define the classpath including external JAR dependencies -->
+    <path id="full.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>
+		<pathelement location="${resources.dir}"/>    	
+    </path>
+
+    <!-- Clean target -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Compile target -->
+    <target name="compile" depends="clean">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" deprecation="false" fork="true" includeAntRuntime="false">
+            <classpath refid="full.classpath"/>
+        </javac>
+        <copy todir="${build.dir}">
+            <fileset dir="${resources.dir}"/>
+        </copy>
+    </target>
+
+    <!-- Run target -->
+    <target name="run" depends ="compile">
+        <java classname="${main.class}" fork="true">
+            <classpath>
+                <pathelement path="${build.dir}"/>
+                <path refid="full.classpath"/>
+            </classpath>
+        </java>
+    </target>
+</project>
